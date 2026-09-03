@@ -763,63 +763,7 @@ I treated this only as useful comparison evidence. I did not treat it as
 official TH1520 BootROM documentation, and I did not claim an exact
 BootROM SD offset from it.
 
-------------------------------------------------------------------------
-
-## 25. Final state of the investigation
-
-At the end of the work, the situation was:
-
-``` text
-Yocto build
-    ↓
-SUCCESS
-    ↓
-core-image-minimal artifacts generated
-    ↓
-WIC image generated
-    ↓
-WIC written to /dev/sda using dd
-    ↓
-SD contains the expected GPT partitions
-    ↓
-SD inserted into BeagleV-Ahead
-    ↓
-SD BOOT held during power/reset
-    ↓
-TH1520 BootROM attempts SD boot
-    ↓
-"sd card boot error"
-```
-
-When the board was allowed to use its existing eMMC system:
-
-``` text
-eMMC
-  ↓
-SPL / U-Boot
-  ↓
-Linux
-  ↓
-login
-```
-
-and Linux could detect the same SD card and its three partitions.
-
-The current upstream BeagleV-Ahead Yocto machine configuration
-explicitly states:
-
-``` text
-currently just a fastboot deployment is supported
-```
-
-So the result I reached was that the **build itself is correct and
-successful**, but the direct `WIC → dd → SD card` deployment I tested
-did not provide a working early SD boot path for this BSP.
-
-I preserved the working eMMC installation and did not overwrite it.
-
-------------------------------------------------------------------------
-
+-----------------------------------------------------------------------
 ## References
 
 BeagleV-Ahead documentation:
