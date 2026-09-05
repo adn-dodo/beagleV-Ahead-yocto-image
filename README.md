@@ -1,4 +1,3 @@
-# beagleV-yocto-image
 # BeagleV-Ahead Yocto Build
 
 This document records the work I did on the BeagleV-Ahead in the same sequence I followed, from preparing the Yocto environment to building the image.
