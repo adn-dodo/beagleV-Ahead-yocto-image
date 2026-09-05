@@ -1,9 +1,7 @@
 # beagleV-yocto-image
-# BeagleV-Ahead Yocto Build.
+# BeagleV-Ahead Yocto Build
 
-This document records the work I did on the BeagleV-Ahead in the same
-sequence I followed it, from preparing the Yocto environment to building
-the image.
+This document records the work I did on the BeagleV-Ahead in the same sequence I followed, from preparing the Yocto environment to building the image.
 
 ------------------------------------------------------------------------
 
@@ -29,29 +27,28 @@ git clone https://git.openembedded.org/openembedded-core
 git clone https://github.com/riscv/meta-riscv.git
 ```
 
-All repositories must use compatible branches. Mixing a Yocto release branch
-with an incompatible newer `meta-riscv` branch caused parsing errors in an
-earlier attempt. For reproducibility, the exact revisions can be saved with:
+All repositories must use compatible branches. Mixing a Yocto release branch with an incompatible newer `meta-riscv` branch caused parsing errors in an earlier attempt. For reproducibility, the exact revisions can be saved with:
 
 ```bash
 git -C ~/yocto/bitbake rev-parse HEAD
 git -C ~/yocto/openembedded-core rev-parse HEAD
 git -C ~/yocto/meta-riscv rev-parse HEAD
 ```
+
 ------------------------------------------------------------------------
 
 ## 2. Preparing Python
 
 I used Python 3.10.14 through `pyenv`.
 
-``` bash
+```bash
 pyenv shell 3.10.14
 python3 --version
 ```
 
 The output was:
 
-``` text
+```text
 Python 3.10.14
 ```
 
@@ -59,25 +56,22 @@ Python 3.10.14
 
 ## 3. Creating the BeagleV-Ahead build environment
 
-From the Yocto workspace, I initialized a separate build directory for
-the board:
+From the Yocto workspace, I initialized a separate build directory for the board:
 
-``` bash
+```bash
 cd ~/yocto
 source openembedded-core/oe-init-build-env build-beaglev-ahead
 ```
 
 This created/entered:
 
-``` text
+```text
 ~/yocto/build-beaglev-ahead
 ```
 
-I then made sure that the build included the required layers:
+I then made sure that the build included the required layers, checking them with:
 
-I checked them with:
-
-``` bash
+```bash
 bitbake-layers show-layers
 ```
 
@@ -87,67 +81,65 @@ bitbake-layers show-layers
 
 I configured the target machine in:
 
-``` text
+```text
 ~/yocto/build-beaglev-ahead/conf/local.conf
 ```
 
 using:
 
-``` conf
+```conf
 MACHINE = "beaglev-ahead"
 ```
 
 I verified that BitBake was actually using this machine with:
 
-``` bash
+```bash
 bitbake -e core-image-minimal | grep '^MACHINE='
 ```
 
 which showed:
 
-``` text
+```text
 MACHINE="beaglev-ahead"
 ```
 
 The target system was RISC-V 64-bit:
 
-``` text
+```text
 TARGET_SYS = riscv64-oe-linux
 ```
 
-Allow root login without a password
+**Allow root login without a password**
 
-To prevent the `Login incorrect` problem I initially encountered, I added this
-line to `local.conf`:
+To prevent the `Login incorrect` problem I initially encountered, I added this line to `local.conf`:
 
 ```conf
 EXTRA_IMAGE_FEATURES += "allow-empty-password empty-root-password allow-root-login"
 ```
+
 ------------------------------------------------------------------------
 
 ## 5. Limiting the build to four parallel jobs
- I
-limited the parallelism in `local.conf`:
 
-``` conf
+I limited the parallelism in `local.conf`:
+
+```conf
 BB_NUMBER_THREADS = "4"
 PARALLEL_MAKE = "-j 4"
 ```
+
 ------------------------------------------------------------------------
 
 ## 6. Building `core-image-minimal`
 
 I started the image build with:
 
-``` bash
+```bash
 bitbake core-image-minimal
 ```
 
-The build completed successfully.
-
-All tasks were executed successfully.
+The build completed successfully. All tasks were executed successfully.
 
 The important point here is that the Yocto build itself was successful.
 
 ------------------------------------------------------------------------
-
