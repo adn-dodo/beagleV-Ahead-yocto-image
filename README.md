@@ -7,25 +7,11 @@ the image.
 
 ------------------------------------------------------------------------
 
-##1. Workspace and sources
+## 1. Workspace and sources
 
-For the BeagleV-Ahead build, I needed BitBake, OpenEmbedded-Core, and
-the RISC-V BSP layer.
+I used this workspace layout:
 
-I cloned:
-
-``` bash
-git clone https://git.openembedded.org/bitbake
-git clone https://git.openembedded.org/openembedded-core
-git clone https://github.com/riscv/meta-riscv.git
-```
-
-At first, I had tried using a Yocto release branch together with a newer
-`meta-riscv` branch. This caused parsing errors because the layers were
-not compatible with each other.
-The resulting workspace was:
-
-``` text
+```text
 ~/yocto/
 ├── bitbake/
 ├── openembedded-core/
@@ -33,6 +19,25 @@ The resulting workspace was:
 └── build-beaglev-ahead/
 ```
 
+I cloned BitBake, OpenEmbedded-Core, and the RISC-V BSP layer:
+
+```bash
+mkdir -p ~/yocto
+cd ~/yocto
+git clone https://git.openembedded.org/bitbake
+git clone https://git.openembedded.org/openembedded-core
+git clone https://github.com/riscv/meta-riscv.git
+```
+
+All repositories must use compatible branches. Mixing a Yocto release branch
+with an incompatible newer `meta-riscv` branch caused parsing errors in an
+earlier attempt. For reproducibility, the exact revisions can be saved with:
+
+```bash
+git -C ~/yocto/bitbake rev-parse HEAD
+git -C ~/yocto/openembedded-core rev-parse HEAD
+git -C ~/yocto/meta-riscv rev-parse HEAD
+```
 ------------------------------------------------------------------------
 
 ## 2. Preparing Python
